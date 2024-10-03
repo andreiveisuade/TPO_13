@@ -1,20 +1,11 @@
 [
     {
         "dni": "19012399",
-        "nombre": "andrei",
-        "apellido": "veis",
-        "edad": 30,
-        "fecha": "12/08/1993",
-        "monto": 300.0,
-        "origen": "Personal"
-    },
-    {
-        "dni": "12341234",
-        "nombre": "andrei",
-        "apellido": "veis",
-        "edad": 20,
-        "fecha": "03/10/2024",
-        "monto": 10000.0,
-        "origen": "alsdkfja\u00f1sdjf"
+        "nombre": "jujuj",
+        "apellido": "jujujuj",
+        "edad": 78,
+        "fecha": "10/12/1999",
+        "monto": 1234.0,
+        "origen": "jujujuj"
     }
 ]

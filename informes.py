@@ -1,5 +1,3 @@
-# informes.py
-
 import json
 from datetime import datetime
 from utils import cargar_contribuyentes
@@ -48,6 +46,3 @@ def generar_informe():
     print(f"Edad promedio: {edad_promedio:.2f}")
     print(f"Fecha de declaración más cercana: {fecha_mas_cercana}")
     print(f"Fecha de declaración más lejana: {fecha_mas_lejana}")
-
-# Llama a la función para generar el informe
-# generar_informe()

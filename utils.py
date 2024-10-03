@@ -9,22 +9,21 @@ def cargar_contribuyentes():
         return []
 
 def validar_dni(dni):
-    """Valida que el DNI sea un número de 8 dígitos."""
+    # Asumiendo que el DNI debe ser un número y tener 8 dígitos
     return dni.isdigit() and len(dni) == 8
 
 def validar_edad(edad):
-    """Valida que la edad sea un número entero positivo."""
-    return edad.isdigit() and int(edad) > 0
+    # Verifica que la edad esté en un rango razonable
+    return isinstance(edad, int) and 0 < edad < 120
 
 def validar_fecha(fecha):
-    """Valida que la fecha esté en formato DD/MM/AAAA."""
-    # Expresión regular para fechas en formato DD/MM/AAAA
-    patron = r'^\d{2}/\d{2}/\d{4}$'
-    return re.match(patron, fecha) is not None
-
-def validar_monto(monto):
-    """Valida que el monto sea un número positivo."""
+    # Aquí podrías implementar un formato de fecha (DD/MM/AAAA)
     try:
-        return float(monto) > 0
+        dia, mes, año = map(int, fecha.split('/'))
+        return 1 <= dia <= 31 and 1 <= mes <= 12 and 1900 <= año <= 2100
     except ValueError:
         return False
+
+def validar_monto(monto):
+    # Verifica que el monto sea un número positivo
+    return isinstance(monto, float) and monto >= 0
