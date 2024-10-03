@@ -1,15 +1,8 @@
+# informes.py
+
 import json
 from datetime import datetime
-
-# Cargar los contribuyentes desde el archivo JSON
-def cargar_contribuyentes():
-    try:
-        with open("contribuyentes.json", "r") as archivo:
-            contribuyentes = json.load(archivo)
-            return contribuyentes
-    except FileNotFoundError:
-        print("No se encontró el archivo de contribuyentes.")
-        return []
+from utils import cargar_contribuyentes
 
 # Función para generar los informes
 def generar_informe():

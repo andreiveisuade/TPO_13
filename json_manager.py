@@ -1,10 +1,10 @@
 import json
+from utils import cargar_contribuyentes
 
 def guardar_contribuyente(contribuyente):
     try:
         # Cargar contribuyentes existentes
-        with open("contribuyentes.json", "r") as file:
-            contribuyentes = json.load(file)
+        contribuyentes = cargar_contribuyentes()
     except FileNotFoundError:
         contribuyentes = []
     
@@ -14,10 +14,3 @@ def guardar_contribuyente(contribuyente):
     # Guardar de nuevo en el archivo JSON
     with open("contribuyentes.json", "w") as file:
         json.dump(contribuyentes, file)
-
-def cargar_contribuyentes():
-    try:
-        with open("contribuyentes.json", "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []

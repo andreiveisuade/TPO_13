@@ -1,4 +1,12 @@
 import re  # Para validación de expresiones regulares
+import json
+
+def cargar_contribuyentes():
+    try:
+        with open("contribuyentes.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
 def validar_dni(dni):
     """Valida que el DNI sea un número de 8 dígitos."""
