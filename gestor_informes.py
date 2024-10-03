@@ -2,7 +2,6 @@ from json_manager import cargar_contribuyentes
 from informes import generar_informes
 
 def mostrar_informes():
-    # Cargar los contribuyentes desde el archivo JSON
     contribuyentes = cargar_contribuyentes()
 
     if contribuyentes:

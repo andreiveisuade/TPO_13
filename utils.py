@@ -1,4 +1,5 @@
-import re  # Para validación de expresiones regulares
+from datetime import datetime
+import re
 import json
 
 def cargar_contribuyentes():
@@ -7,23 +8,39 @@ def cargar_contribuyentes():
             return json.load(file)
     except FileNotFoundError:
         return []
+    except json.JSONDecodeError:
+        print("Error: archivo JSON corrupto.")
+        return []
 
 def validar_dni(dni):
-    # Asumiendo que el DNI debe ser un número y tener 8 dígitos
     return dni.isdigit() and len(dni) == 8
 
 def validar_edad(edad):
-    # Verifica que la edad esté en un rango razonable
     return isinstance(edad, int) and 0 < edad < 120
 
 def validar_fecha(fecha):
-    # Aquí podrías implementar un formato de fecha (DD/MM/AAAA)
     try:
-        dia, mes, año = map(int, fecha.split('/'))
-        return 1 <= dia <= 31 and 1 <= mes <= 12 and 1900 <= año <= 2100
+        # Usamos strptime para verificar el formato correcto
+        datetime.strptime(fecha, "%d/%m/%Y")
+        return True
     except ValueError:
         return False
 
 def validar_monto(monto):
-    # Verifica que el monto sea un número positivo
     return isinstance(monto, float) and monto >= 0
+
+def validar_contribuyente(contribuyente):
+    errores = []
+    if not validar_dni(contribuyente["dni"]):
+        errores.append("DNI inválido.")
+    if not contribuyente["nombre"]:
+        errores.append("Nombre es requerido.")
+    if not contribuyente["apellido"]:
+        errores.append("Apellido es requerido.")
+    if not validar_edad(contribuyente["edad"]):
+        errores.append("Edad inválida.")
+    if not validar_fecha(contribuyente["fecha"]):
+        errores.append("Fecha inválida. Debe tener el formato DD/MM/AAAA.")
+    if not validar_monto(contribuyente["monto"]):
+        errores.append("Monto inválido.")
+    return errores

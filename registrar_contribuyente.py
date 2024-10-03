@@ -1,72 +1,69 @@
 import tkinter as tk
 from tkinter import messagebox
+from utils import validar_contribuyente
 from json_manager import guardar_contribuyente
-from utils import validar_edad, validar_dni, validar_fecha, validar_monto
 
-def registrar_contribuyente():
-    ventana_registro = tk.Tk()
+def registrar_contribuyente(ventana_principal):
+    # Ocultar la ventana principal
+    ventana_principal.withdraw()
+
+    ventana_registro = tk.Toplevel()  # Creamos una nueva ventana
     ventana_registro.title("Registrar Contribuyente")
 
-    # Creación de los widgets Entry
-    entries = []
-    for label in ["DNI:", "Nombre:", "Apellido:", "Edad:", "Fecha (DD/MM/AAAA):", "Monto:", "Origen de los fondos:"]:
-        tk.Label(ventana_registro, text=label).pack()
+    # Función para volver al menú principal
+    def volver_al_menu():
+        ventana_registro.destroy()  # Cerramos la ventana de registro
+        ventana_principal.deiconify()  # Mostramos la ventana principal nuevamente
+
+    # Creación de los campos de entrada
+    entries = {}
+    labels = {
+        "dni": "DNI",
+        "nombre": "Nombre",
+        "apellido": "Apellido",
+        "edad": "Edad",
+        "fecha": "Fecha (DD/MM/AAAA)",  # Asignamos explícitamente la clave "fecha"
+        "monto": "Monto",
+        "origen": "Origen de los fondos"
+    }
+
+    for key, label in labels.items():
+        tk.Label(ventana_registro, text=label + ":").pack()
         entry = tk.Entry(ventana_registro)
         entry.pack()
-        entries.append(entry)
+        entries[key] = entry  # Guardamos la clave correcta
 
     def guardar():
         try:
-            contribuyente = {}
-            for entry, label in zip(entries, ["dni", "nombre", "apellido", "edad", "fecha", "monto", "origen"]):
-                valor = entry.get().strip()
-                if label == "edad":
-                    valor = int(valor)  # Convierte a entero
-                elif label == "monto":
-                    valor = float(valor)  # Convierte a float
-                contribuyente[label] = valor
+            # Recopilar datos
+            contribuyente = {key: entry.get().strip() for key, entry in entries.items()}
+            contribuyente["edad"] = int(contribuyente["edad"])
+            contribuyente["monto"] = float(contribuyente["monto"])
 
-            # Validaciones
-            print("Datos a validar:", contribuyente)  # Mensaje de depuración
+            # Validar datos
+            errores = validar_contribuyente(contribuyente)
+            if errores:
+                raise ValueError("\n".join(errores))
 
-            if not validar_dni(str(contribuyente["dni"])):
-                print("DNI inválido.")
-            if not contribuyente["nombre"]:
-                print("Nombre inválido.")
-            if not contribuyente["apellido"]:
-                print("Apellido inválido.")
-            if not validar_edad(contribuyente["edad"]):
-                print("Edad inválida.")
-            if not validar_fecha(contribuyente["fecha"]):
-                print("Fecha inválida.")
-            if not validar_monto(contribuyente["monto"]):
-                print("Monto inválido.")
-            
-            if not (
-                validar_dni(str(contribuyente["dni"])) and 
-                contribuyente["nombre"] and 
-                contribuyente["apellido"] and 
-                validar_edad(contribuyente["edad"]) and 
-                validar_fecha(contribuyente["fecha"]) and 
-                validar_monto(contribuyente["monto"]) and 
-                contribuyente["origen"]
-            ):
-                raise ValueError("Datos inválidos.")
-
+            # Guardar contribuyente
             guardar_contribuyente(contribuyente)
             messagebox.showinfo("Éxito", "Contribuyente guardado correctamente.")
 
-            # Limpiar los campos
-            for entry in entries:
+            # Limpiar campos
+            for entry in entries.values():
                 entry.delete(0, tk.END)
 
         except ValueError as e:
-            messagebox.showerror("Error", f"Datos inválidos: {e}")
+            messagebox.showerror("Error de validación", str(e))
         except Exception as e:
-            messagebox.showerror("Error", f"Ocurrió un error inesperado: {e}")
+            messagebox.showerror("Error inesperado", f"Ocurrió un error: {e}")
 
     # Botón para guardar contribuyente
     btn_guardar = tk.Button(ventana_registro, text="Guardar", command=guardar)
     btn_guardar.pack(pady=10)
+
+    # Botón para volver al menú principal
+    btn_volver = tk.Button(ventana_registro, text="Volver al Menú", command=volver_al_menu)
+    btn_volver.pack(pady=10)
 
     ventana_registro.mainloop()
