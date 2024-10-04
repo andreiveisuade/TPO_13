@@ -34,29 +34,24 @@ def registrar_contribuyente(ventana_principal):
         entries[key] = entry  # Guardamos la clave correcta
 
     def guardar():
-        try:
-            # Recopilar datos
-            contribuyente = {key: entry.get().strip() for key, entry in entries.items()}
-            contribuyente["edad"] = int(contribuyente["edad"])
-            contribuyente["monto"] = float(contribuyente["monto"])
+        # Recopilar datos
+        contribuyente = {key: entry.get().strip() for key, entry in entries.items()}
+        contribuyente["edad"] = int(contribuyente["edad"])
+        contribuyente["monto"] = float(contribuyente["monto"])
 
-            # Validar datos
-            errores = validar_contribuyente(contribuyente)
-            if errores:
-                raise ValueError("\n".join(errores))
+        # Validar datos
+        errores = validar_contribuyente(contribuyente)
+        if errores:
+            messagebox.showerror("Error de validación", "\n".join(errores))
+            return
 
-            # Guardar contribuyente
-            guardar_contribuyente(contribuyente)
-            messagebox.showinfo("Éxito", "Contribuyente guardado correctamente.")
+        # Guardar contribuyente
+        guardar_contribuyente(contribuyente)
+        messagebox.showinfo("Éxito", "Contribuyente guardado correctamente.")
 
-            # Limpiar campos
-            for entry in entries.values():
-                entry.delete(0, tk.END)
-
-        except ValueError as e:
-            messagebox.showerror("Error de validación", str(e))
-        except Exception as e:
-            messagebox.showerror("Error inesperado", f"Ocurrió un error: {e}")
+        # Limpiar campos
+        for entry in entries.values():
+            entry.delete(0, tk.END)
 
     # Botón para guardar contribuyente
     btn_guardar = tk.Button(ventana_registro, text="Guardar", command=guardar)
