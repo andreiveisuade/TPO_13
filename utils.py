@@ -1,15 +1,12 @@
 from datetime import datetime
-import re
 import json
 
 def cargar_contribuyentes():
     try:
         with open("contribuyentes.json", "r") as file:
             return json.load(file)
-    except FileNotFoundError:
-        return []
-    except json.JSONDecodeError:
-        print("Error: archivo JSON corrupto.")
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("Error: archivo JSON corrupto o no encontrado.")
         return []
 
 def validar_dni(dni):
@@ -20,7 +17,6 @@ def validar_edad(edad):
 
 def validar_fecha(fecha):
     try:
-        # Usamos strptime para verificar el formato correcto
         datetime.strptime(fecha, "%d/%m/%Y")
         return True
     except ValueError:

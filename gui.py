@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, scrolledtext
-from informes import generar_informe  # Asegúrate de que esta línea esté aquí
+from generar_informes import generar_informe
 from registrar_contribuyente import registrar_contribuyente
 
 def iniciar_gui():
@@ -8,7 +8,7 @@ def iniciar_gui():
     ventana_principal.title("Menú Principal")
 
     def abrir_registro():
-        registrar_contribuyente(ventana_principal)  # Pasar la ventana principal aquí
+        registrar_contribuyente(ventana_principal)
 
     def generar_informes():
         ventana_informe = tk.Toplevel(ventana_principal)
@@ -17,13 +17,12 @@ def iniciar_gui():
         text_area = scrolledtext.ScrolledText(ventana_informe, width=60, height=20)
         text_area.pack(pady=10)
 
-        informes = generar_informe()  # Llamar a la función aquí
+        informes = generar_informe()
         if informes:
             text_area.insert(tk.END, informes)  
         else:
             messagebox.showinfo("Informe", "No hay contribuyentes registrados.")
 
-        # Agregar botón de salir
         btn_salir = tk.Button(ventana_informe, text="Salir", command=ventana_informe.destroy)
         btn_salir.pack(pady=10)
 
